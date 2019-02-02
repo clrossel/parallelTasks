@@ -1,0 +1,74 @@
+FROM ubuntu:16.04
+
+# Default to UTF-8 file.encoding
+ENV LANG C.UTF-8
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# Be more aggressive about package manager removing
+# dependencies that were installed by packages no
+# longer on the system. Without this option, this
+# happens in this case:
+#
+# Package A is installed that depends on Package B
+# Then Package A is removed
+# Package B is still on the system
+#
+# With this option, Package B will also be removed
+RUN echo 'Apt::AutoRemove::SuggestsImportant "false";' \
+      > /etc/apt/apt.conf.d/docker-autoremove-suggests \
+    && echo 'force-unsafe-io' \
+      > /etc/dpkg/dpkg.cfg.d/docker-apt-speedup \
+    # Delete locales
+    && echo 'path-exclude=/usr/share/locale/*' \
+      > /etc/dpkg/dpkg.cfg.d/01_nodoc \
+    # Delete man pages
+    && echo 'path-exclude=/usr/share/man/*' \
+      >> /etc/dpkg/dpkg.cfg.d/01_nodoc \
+    # Delete docs
+    && echo 'path-exclude=/usr/share/doc/*' \
+      >> /etc/dpkg/dpkg.cfg.d/01_nodoc \
+    && echo 'path-include=/usr/share/doc/*/copyright' \
+      >> /etc/dpkg/dpkg.cfg.d/01_nodoc
+
+#
+# Install Java 8 JDK
+#
+
+# A few problems with compiling Java from source:
+#  1. Oracle.  Licensing prevents us from redistributing the official JDK.
+#  2. Compiling OpenJDK also requires the JDK to be installed, and it gets
+#       really hairy.
+
+RUN set -x \
+    && javaBuildDeps=" \
+       apt-utils \
+       bzip2 \
+       unzip \
+       xz-utils \
+    " \
+    && javaDeps=" \
+       libjna-java \
+       openjdk-8-jre-headless \
+       openjdk-8-jdk-headless \
+       ca-certificates-java \
+    " \
+    && apt-get -qy update \
+    && apt-get -qy install --no-install-recommends $javaBuildDeps $javaDeps && \
+    # add a simple script that can auto-detect the appropriate JAVA_HOME value
+    # based on whether the JDK or only the JRE is installed
+    { \
+  		echo '#!/bin/sh'; \
+  		echo 'set -e'; \
+  		echo; \
+  		echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
+  	} > /usr/local/bin/docker-java-home \
+  	&& chmod +x /usr/local/bin/docker-java-home \
+  	&& MYJAVA=$(/usr/local/bin/docker-java-home) \
+    # see https://bugs.debian.org/775775
+    # and https://github.com/docker-library/java/issues/19#issuecomment-70546872
+    && /var/lib/dpkg/info/ca-certificates-java.postinst configure \
+    && apt-get purge -qy --auto-remove $javaBuildDeps \
+    && rm -rf /var/lib/apt/lists/*
+
+ENV JAVA_HOME $MYJAVA

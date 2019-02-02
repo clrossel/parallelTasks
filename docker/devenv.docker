@@ -1,0 +1,29 @@
+FROM paralleltasks/java
+
+RUN set -x \
+    && devDeps=" \
+       build-essential \
+       curl \
+       git \
+       gnupg \
+       inetutils-ping \
+       maven \
+       python \
+       rpm \
+       wget \
+       vim \
+       dh-autoreconf \
+       rubygems \
+    " \
+    && apt-get -q update \
+    && apt-get -qy install --no-install-recommends $devDeps \
+    && gem install travis
+
+# Map parallelTasks repo
+VOLUME /root/parallelTasks
+
+# Map Maven's configuration & cache directory
+VOLUME /root/.m2
+
+# Set default directory when container runs
+WORKDIR /root/parallelTasks
