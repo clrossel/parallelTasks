@@ -3,17 +3,20 @@ FROM paralleltasks/java
 RUN set -x \
     && devDeps=" \
        build-essential \
+       dh-autoreconf \
        curl \
        git \
-       gnupg \
+       gnupg2 \
        inetutils-ping \
        maven \
+       openssh-client \
        python \
        rpm \
-       wget \
-       vim \
-       dh-autoreconf \
+       ruby-dev \
        rubygems \
+       rubygems-integration \
+       vim \
+       wget \
     " \
     && apt-get -q update \
     && apt-get -qy install --no-install-recommends $devDeps \
