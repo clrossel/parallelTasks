@@ -63,6 +63,18 @@ Refer to
 [Travis CI parallelTasks page](http://travis-ci.org/clrossel/parallelTasks)
 to see the test code in action. 
 
+### Using ParallelTasks in Your Project
+
+> Maven dependency
+
+```XML
+<dependency>
+    <groupId>io.github.clrossel</groupId>
+    <artifactId>paralleltasks</artifactId>
+    <version>r02</version>
+</dependency>
+```
+
 ### Building ParallelTasks
 
 Docker images are conveniently provided such
