@@ -42,7 +42,7 @@ build:
 compile: build ## compile parallelTasks
 	@$(DOCKER_RUN) $(DEV) mvn clean package
 
-shell: ## start a shell inside the build env
+shell: build ## start a shell inside the build env
 	@clear && $(DOCKER_RUN_IT) $(DEV) bash
 
 help: ## this help

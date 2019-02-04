@@ -62,3 +62,28 @@ tasks and using the callbacks.
 Refer to 
 [Travis CI parallelTasks page](http://travis-ci.org/clrossel/parallelTasks)
 to see the test code in action. 
+
+### Building ParallelTasks
+
+Docker images are conveniently provided such
+that the only required software to build are
+[Docker Desktop](https://www.docker.com/products/docker-desktop) and ```make``` utility.
+
+> **Note:** Instructions below are for MacOS, adjust
+instructions as needed for other operating systems. 
+
+   1. Download and install [Docker Desktop for MacOS](https://hub.docker.com/editions/community/docker-ce-desktop-mac)
+   1. Make
+      1. Open a terminal window
+      1. (on recent MacOS versions, just type
+      ```make``` and follow prompts to install the
+      XCode Command Line tools)
+   1. Clone this repo to a directory
+   1. Run ```make compile```, which will do all of the following:
+      1. Pull down the ```Ubuntu/16.04``` Docker image
+      1. Build ```parallelTools/java``` Docker image based on ```Ubuntu/16.04```
+      1. Build ```parallelTools/devenv``` dev environment based on ```parallelTools/java``` image
+      1. Start an instance of the ```parallelTools/devenv``` container
+      1. Run ```mvn clean package``` inside the ```parallelTools/devenv``` image
+      
+ 
