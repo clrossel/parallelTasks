@@ -71,7 +71,7 @@ to see the test code in action.
 <dependency>
     <groupId>io.github.clrossel</groupId>
     <artifactId>paralleltasks</artifactId>
-    <version>r02</version>
+    <version>r03</version>
 </dependency>
 ```
 
