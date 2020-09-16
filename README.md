@@ -55,7 +55,7 @@ have the option of either:
  stopping point by calling ```waitForResults()```
 
 Refer to
-[```ParallelTasksTest```](https://github.com/clrossel/parallelTasks/blob/master/library/src/test/java/io/github/clrossel/ParallelTasksTest.java)
+[```ParallelTasksTest```](https://github.com/clrossel/parallelTasks/blob/master/src/test/java/io/github/clrossel/ParallelTasksTest.java)
 for examples on how to retrieve results from the
 tasks and using the callbacks.
 
